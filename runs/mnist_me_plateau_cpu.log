@@ -1,0 +1,1 @@
+[train] epoch=00 batch=0000 loss=2.4438 acc=0.0938 pr=47.242 res=0.262 torque=0.763 eta=0.7401 lambda=0.0467 w_r=0.1092 beta=0.0500 gamma=0.9083
