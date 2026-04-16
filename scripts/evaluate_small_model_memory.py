@@ -8,7 +8,7 @@ Purpose:
 
 Recommended first run:
 
-    python3 evaluate_small_model_memory.py --model-name sshleifer/tiny-gpt2
+    python3 -m scripts.evaluate_small_model_memory --model-name sshleifer/tiny-gpt2
 """
 
 from __future__ import annotations
@@ -21,7 +21,7 @@ import numpy as np
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from long_context_recall_benchmark import evaluate_long_context_recall
+from .long_context_recall_benchmark import evaluate_long_context_recall
 from me_layer import create_model
 
 

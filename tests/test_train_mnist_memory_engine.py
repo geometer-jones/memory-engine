@@ -4,7 +4,7 @@ from types import SimpleNamespace
 
 import torch
 
-from train_mnist_memory_engine import (
+from scripts.train_mnist_memory_engine import (
     build_datasets,
     build_loaders,
     build_model,

@@ -11,7 +11,7 @@ import torch.nn.functional as F
 from torch.utils.data import DataLoader, Dataset
 from transformers import GPT2Tokenizer
 from me_layer import create_model
-from llm_instrument import compute_pr, compute_anisotropy
+from .llm_instrument import compute_pr, compute_anisotropy
 
 np.set_printoptions(precision=4, suppress=True)
 

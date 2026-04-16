@@ -1,2 +1,9 @@
 .DS_Store
 .pytest_cache/
+__pycache__/
+*.py[cod]
+.mypy_cache/
+.ruff_cache/
+runs/*.log
+runs/*.pt
+runs/*.pth

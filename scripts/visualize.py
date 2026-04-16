@@ -1,4 +1,4 @@
-"""Visualize LLM diagnostic results from run_diagnostics.py."""
+"""Visualize LLM diagnostic results from ``python -m scripts.run_diagnostics``."""
 
 import numpy as np
 import matplotlib

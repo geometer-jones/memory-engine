@@ -1,7 +1,7 @@
 """
 Phase 5: Anticipatory Operator Verification.
 
-Tests predictions from PHASE5_ANTICIPATION.md:
+Tests predictions from docs/PHASE5_ANTICIPATION.md:
   T1: Habituation under predictable input (prediction error decay)
   T2: Surprise response to perturbation (prediction error spike)
   T3: Cross-dimensional surprise propagation through coupling

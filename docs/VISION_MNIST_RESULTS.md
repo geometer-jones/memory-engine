@@ -11,7 +11,7 @@ New code paths:
 - `vision_memory_engine.py`
   - `VisionMemoryRecognizer` turns an image into a patch sequence and runs that sequence through `MemoryEngineLayer`.
   - The current default path includes a small convolutional stem before patchification so the ME sees richer local stroke structure.
-- `train_mnist_memory_engine.py`
+- `scripts/train_mnist_memory_engine.py`
   - trains and evaluates the vision model on MNIST
   - supports fake-data smoke runs
   - builds digit prototypes from final ME tape states
@@ -23,7 +23,7 @@ Support work:
   - mutable basis/coupling cache tensors were detached/cloned at the projection boundary to avoid autograd version-counter failures during training
 - tests
   - `test_vision_memory_engine.py`
-  - `test_train_mnist_memory_engine.py`
+  - `tests/test_train_mnist_memory_engine.py`
 
 ## Architecture
 
@@ -165,13 +165,13 @@ It is better than random after adding the conv stem. Still not good enough to cl
 Smoke test with fake data:
 
 ```bash
-python3 train_mnist_memory_engine.py --fake-data --epochs 1 --train-limit 64 --test-limit 32 --batch-size 16 --eval-batch-size 16 --device cpu
+python3 -m scripts.train_mnist_memory_engine --fake-data --epochs 1 --train-limit 64 --test-limit 32 --batch-size 16 --eval-batch-size 16 --device cpu
 ```
 
 Real MNIST slice with per-digit resonance reporting:
 
 ```bash
-python3 train_mnist_memory_engine.py \
+python3 -m scripts.train_mnist_memory_engine \
   --data-dir /tmp/mnist_fresh \
   --epochs 3 \
   --train-limit 2000 \
@@ -186,7 +186,7 @@ python3 train_mnist_memory_engine.py \
 Disable the conv stem:
 
 ```bash
-python3 train_mnist_memory_engine.py --stem-channels ''
+python3 -m scripts.train_mnist_memory_engine --stem-channels ''
 ```
 
 ## Current recommendation

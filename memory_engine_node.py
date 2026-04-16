@@ -7,7 +7,7 @@ persistent ``MemoryEngineState`` with an independent tape ``s``, basis matrix
 ``E``, Gram matrix ``G = E^T E``, and coupling matrix ``L = G^-1``.
 
 Design notes:
-    - ``paper/supplement.md`` §S5.6 motivates the layer as a recurrent tape
+    - ``docs/paper/supplement.md`` §S5.6 motivates the layer as a recurrent tape
       operator that can sit inside larger neural systems.
     - §S6.1–S6.4 specify the consolidation operator (binding, merge, prune,
       seed). The wrapped layer already implements those mechanics per node.

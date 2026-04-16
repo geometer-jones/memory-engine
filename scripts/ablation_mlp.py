@@ -12,7 +12,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 from transformers import GPT2LMHeadModel, GPT2Config, GPT2Tokenizer
-from attention_mapping import (
+from .attention_mapping import (
     attention_entropy, attention_pr, attention_regime,
     head_specialization, instrument_attention, print_report
 )

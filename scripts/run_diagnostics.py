@@ -9,7 +9,7 @@ Experiments:
 
 import numpy as np
 import torch
-from llm_instrument import (
+from .llm_instrument import (
     load_model,
     instrument_forward,
     compute_self_torque_matrix,

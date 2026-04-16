@@ -110,6 +110,6 @@ This is why the framework predicts phenomenality requires accumulated tape state
 
 | File | Purpose |
 |---|---|
-| `attention_mapping.py` | Attention instrumentation and analysis code |
+| `scripts/attention_mapping.py` | Attention instrumentation and analysis code |
 | `ablation_mlp.py` | MLP ablation experiment |
 | `ATTENTION_FINDINGS.md` | This document |

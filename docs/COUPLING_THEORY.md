@@ -20,7 +20,7 @@ The Hadamard product is **dimensionally isolated**: c_i depends only on (v_i, s_
 It also produces two documented failures:
 
 - **Novelty detection gap** (T3.2): Structure at dimensions outside the system's basis is invisible. The torque difference with vs. without novelty was 0.30 dimensions -- within noise.
-- **Binding failure** (standalone_me_binding.py): The Hadamard product cannot associate dimensions. Cross-dimensional binding required bolt-on mechanisms that degraded performance.
+- **Binding failure** (`scripts/standalone_me_binding.py`): The Hadamard product cannot associate dimensions. Cross-dimensional binding required bolt-on mechanisms that degraded performance.
 
 The reconstruction must resolve these failures without destroying the confirmed dynamics. This document derives the minimum generalization.
 

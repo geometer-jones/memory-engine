@@ -1,7 +1,7 @@
 """
 Phase 3 Stability Theory Verification.
 
-Tests predictions from PHASE3_STABILITY.md:
+Tests predictions from docs/PHASE3_STABILITY.md:
   T1: Operating regime window with structured input (kappa bounds)
   T2: Aligned vs misaligned coupling on abstraction
   T3: Self-regulated coupling via basis monitoring

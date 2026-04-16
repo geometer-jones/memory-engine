@@ -10,15 +10,15 @@ This module extends the original `me_layer.py` design rather than replacing it:
 It adds the missing machinery from the repo notes:
 
 - Coupled reception via Gram matrix G = E^T E and coupling matrix L = G^{-1}
-  (paper/root.md Section 4, COUPLING_THEORY.md Sections 3-5)
+  (docs/paper/root.md Section 4, docs/COUPLING_THEORY.md Sections 3-5)
 - Sensor leakage Delta for novelty detection
-  (COUPLING_THEORY.md Section 5)
+  (docs/COUPLING_THEORY.md Section 5)
 - Fast binding via transient conjunctive dimensions
-  (standalone_me_binding.py, paper/root.md Section 7 discussion)
+  (scripts/standalone_me_binding.py, docs/paper/root.md Section 7 discussion)
 - Consolidation loop with merge / prune / seed
-  (paper/root.md Section 4)
+  (docs/paper/root.md Section 4)
 - Anticipatory operator with prediction-error torque
-  (PHASE5_ANTICIPATION.md)
+  (docs/PHASE5_ANTICIPATION.md)
 
 The implementation is designed for hybrid insertion into decoder-only LLMs:
 
@@ -188,7 +188,7 @@ class MemoryEngineLayer(nn.Module):
         self.torque_bias_re = nn.Parameter(torch.randn(self.total_slots) * 0.01)
         self.torque_bias_im = nn.Parameter(torch.randn(self.total_slots) * 0.01)
 
-        # Delta from COUPLING_THEORY.md Section 5. It maps novelty residuals in
+        # Delta from docs/COUPLING_THEORY.md Section 5. It maps novelty residuals in
         # ambient hidden space into active memory slots.
         self.sensor_leakage = nn.Parameter(torch.randn(self.total_slots, hidden_dim) * leakage_init)
 
@@ -334,7 +334,7 @@ class MemoryEngineLayer(nn.Module):
         return coords, coupled, residual
 
     def _apply_sensor_leakage(self, residual: torch.Tensor, state: MemoryEngineState) -> torch.Tensor:
-        """Delta residual path from COUPLING_THEORY.md Section 5."""
+        """Delta residual path from docs/COUPLING_THEORY.md Section 5."""
         leak = torch.matmul(residual, self.sensor_leakage.t())
         return leak * state.active_mask.to(dtype=leak.dtype)
 
@@ -401,7 +401,7 @@ class MemoryEngineLayer(nn.Module):
         reception: torch.Tensor,
     ) -> List[Dict[str, int]]:
         """
-        Sparse fast binding from standalone_me_binding.py.
+        Sparse fast binding from scripts/standalone_me_binding.py.
 
         New transient slots are inserted immediately so their basis contribution is
         routed into the output residual on the same step, while the Gram inverse is
@@ -532,7 +532,7 @@ class MemoryEngineLayer(nn.Module):
 
     def _run_consolidation(self, state: MemoryEngineState) -> List[Dict[str, int]]:
         """
-        Consolidation loop from paper/root.md Section 4:
+        Consolidation loop from docs/paper/root.md Section 4:
 
         - merge from cross-correlation eigenstructure
         - prune weak slots
@@ -658,7 +658,7 @@ class MemoryEngineLayer(nn.Module):
             tape_before = state.tape.clone()
             tape_world = self._renormalize(state.tape + update, state.active_mask)
 
-            # PHASE5_ANTICIPATION.md: A(t) = s(t-1), e(t) = s(t) - s(t-1),
+            # docs/PHASE5_ANTICIPATION.md: A(t) = s(t-1), e(t) = s(t) - s(t-1),
             # c_pred(t) = e(t) ⊙ s(t).
             prediction = torch.where(
                 (state.step > 0).unsqueeze(-1),

@@ -37,7 +37,7 @@ def default_device() -> torch.device:
 def build_mnist_loaders(
     data_dir: str,
     batch_size: int,
-    num_workers: int = 2,
+    num_workers: int = 0,
 ) -> Tuple[DataLoader, DataLoader]:
     """Create standard MNIST train/test loaders."""
     transform = transforms.Compose([transforms.ToTensor()])
@@ -265,6 +265,7 @@ def main() -> None:
     parser.add_argument("--patience", type=int, default=5)
     parser.add_argument("--min-delta", type=float, default=1e-3)
     parser.add_argument("--batch-size", type=int, default=64)
+    parser.add_argument("--num-workers", type=int, default=0)
     parser.add_argument("--lr", type=float, default=3e-4)
     parser.add_argument("--weight-decay", type=float, default=1e-4)
     parser.add_argument("--patch-height", type=int, default=7)
@@ -282,6 +283,7 @@ def main() -> None:
     train_loader, test_loader = build_mnist_loaders(
         data_dir=args.data_dir,
         batch_size=args.batch_size,
+        num_workers=args.num_workers,
     )
 
     model = MNISTMemoryEngine(

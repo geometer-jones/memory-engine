@@ -179,7 +179,7 @@ The model can learn simple regularities but fails on tasks requiring binding (as
 
 ### Fast binding attempt
 
-`standalone_me_binding.py` adds the essay's fast binding mechanism (Section 2.3.1): co-resonance scoring between pairs of strongly-activated dimensions, seeding transient conjunctive dimensions when B_ij exceeds threshold.
+`scripts/standalone_me_binding.py` adds the essay's fast binding mechanism (Section 2.3.1): co-resonance scoring between pairs of strongly-activated dimensions, seeding transient conjunctive dimensions when B_ij exceeds threshold.
 
 **First attempt: binding never fired.** Two compounding bugs:
 
@@ -235,15 +235,15 @@ This is consistent with the framework's own claims: the essay describes phenomen
 | `engine.py` | Core Memory Engine simulation (complex-valued, with leakage) |
 | `test_tier1.py` – `test_tier5.py` | 14 simulation tests |
 | `RESULTS.md` | Simulation findings |
-| `llm_instrument.py` | GPT-2 instrumentation (PR, regime, self-torque) |
-| `run_diagnostics.py` | LLM diagnostic experiments A–D |
+| `scripts/llm_instrument.py` | GPT-2 instrumentation (PR, regime, self-torque) |
+| `scripts/run_diagnostics.py` | LLM diagnostic experiments A–D |
 | `LLM_RESULTS.md` | LLM findings |
 | `me_layer.py` | MemoryEngineLayer + GPT2WithMemoryEngine |
 | `test_me_layer.py` | ME layer tests |
-| `run_me_diagnostics.py` | Vanilla vs ME comparison |
-| `run_me_training.py` | ME layer fine-tuning attempt |
-| `standalone_me.py` | Standalone ME model (real-valued, no binding) |
-| `standalone_me_binding.py` | Standalone ME model with fast binding (complex tape) |
-| `attention_mapping.py` | Attention-framework mapping analysis on GPT-2 |
+| `scripts/run_me_diagnostics.py` | Vanilla vs ME comparison |
+| `scripts/run_me_training.py` | ME layer fine-tuning attempt |
+| `scripts/standalone_me.py` | Standalone ME model (real-valued, no binding) |
+| `scripts/standalone_me_binding.py` | Standalone ME model with fast binding (complex tape) |
+| `scripts/attention_mapping.py` | Attention-framework mapping analysis on GPT-2 |
 | `ATTENTION_FINDINGS.md` | Attention mapping results |
 | `FINDINGS.md` | This document |

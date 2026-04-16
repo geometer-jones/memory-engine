@@ -1,7 +1,7 @@
 """
 Coupling Theory Verification Tests.
 
-Tests the predictions from COUPLING_THEORY.md:
+Tests the predictions from docs/COUPLING_THEORY.md:
   T1: Regime persistence under increasing coupling
   T2: Novelty detection with sensor leakage
   T3: Coupling threshold characterization
@@ -504,4 +504,4 @@ if __name__ == "__main__":
     print("SUMMARY")
     print("=" * 70)
     print()
-    print("Results saved. See COUPLING_THEORY.md for predictions and interpretation.")
+    print("Results saved. See docs/COUPLING_THEORY.md for predictions and interpretation.")
