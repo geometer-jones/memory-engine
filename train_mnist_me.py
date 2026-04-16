@@ -16,6 +16,24 @@ from torchvision import datasets, transforms
 from memory_engine_hierarchy import MNISTMemoryEngine
 
 
+def default_device() -> torch.device:
+    """Prefer CUDA, then Apple MPS, then CPU."""
+    if torch.cuda.is_available():
+        return torch.device("cuda")
+    mps_backend = getattr(torch.backends, "mps", None)
+    if mps_backend is not None and torch.backends.mps.is_available():
+        try:
+            # The current Memory Engine uses complex-valued tape state. PyTorch's
+            # MPS backend still lacks some complex tensor ops used by the engine
+            # (notably repeat on complex tensors), so only select MPS when a
+            # minimal compatibility probe succeeds.
+            _ = torch.randn(2, dtype=torch.complex64, device="mps").unsqueeze(0).repeat(2, 1)
+            return torch.device("mps")
+        except RuntimeError:
+            pass
+    return torch.device("cpu")
+
+
 def build_mnist_loaders(
     data_dir: str,
     batch_size: int,
@@ -117,6 +135,7 @@ def train_epoch(
         labels = labels.to(device, non_blocking=True)
 
         optimizer.zero_grad(set_to_none=True)
+        model.reset_states()
         outputs = model(images, return_metrics=True)
         logits = outputs["logits"]
         loss = F.cross_entropy(logits, labels)
@@ -165,6 +184,7 @@ def evaluate(
         images = images.to(device, non_blocking=True)
         labels = labels.to(device, non_blocking=True)
 
+        model.reset_states()
         outputs = model(images, return_metrics=True)
         logits = outputs["logits"]
         loss = F.cross_entropy(logits, labels)
@@ -242,6 +262,8 @@ def main() -> None:
     parser.add_argument("--resume", default=None)
     parser.add_argument("--eval-only", action="store_true")
     parser.add_argument("--epochs", type=int, default=5)
+    parser.add_argument("--patience", type=int, default=5)
+    parser.add_argument("--min-delta", type=float, default=1e-3)
     parser.add_argument("--batch-size", type=int, default=64)
     parser.add_argument("--lr", type=float, default=3e-4)
     parser.add_argument("--weight-decay", type=float, default=1e-4)
@@ -256,7 +278,7 @@ def main() -> None:
     parser.add_argument("--max-eval-batches", type=int, default=None)
     args = parser.parse_args()
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = default_device()
     train_loader, test_loader = build_mnist_loaders(
         data_dir=args.data_dir,
         batch_size=args.batch_size,
@@ -294,7 +316,13 @@ def main() -> None:
         print_epoch_summary("eval", metrics)
         return
 
-    best_accuracy = 0.0
+    best_accuracy = float("-inf")
+    best_checkpoint_path = str(
+        Path(args.save_path).with_name(
+            f"{Path(args.save_path).stem}_best{Path(args.save_path).suffix}"
+        )
+    )
+    epochs_without_improvement = 0
     for epoch in range(start_epoch, args.epochs):
         train_metrics = train_epoch(
             model=model,
@@ -312,7 +340,12 @@ def main() -> None:
             device=device,
             max_batches=args.max_eval_batches,
         )
-        best_accuracy = max(best_accuracy, eval_metrics["accuracy"])
+        improved = eval_metrics["accuracy"] > (best_accuracy + args.min_delta)
+        if improved:
+            best_accuracy = eval_metrics["accuracy"]
+            epochs_without_improvement = 0
+        else:
+            epochs_without_improvement += 1
 
         print_epoch_summary(f"train {epoch:02d}", train_metrics)
         print_epoch_summary(f"eval  {epoch:02d}", eval_metrics)
@@ -325,6 +358,23 @@ def main() -> None:
             scheduler=scheduler,
             epoch=epoch + 1,
         )
+
+        if improved:
+            save_checkpoint(
+                path=best_checkpoint_path,
+                model=model,
+                optimizer=optimizer,
+                scheduler=scheduler,
+                epoch=epoch + 1,
+            )
+
+        if epochs_without_improvement >= args.patience:
+            print(
+                f"Stopping early after {epoch + 1} epochs because validation accuracy "
+                f"did not improve by at least {args.min_delta:.4f} for "
+                f"{args.patience} consecutive epochs."
+            )
+            break
 
 
 if __name__ == "__main__":
